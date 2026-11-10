@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>율림피아노 제12회 연주회</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* 레이아웃: 휴대폰 한 손 스크롤용 단일 컬럼. 표지(무대 막) → 관람 안내 → 1부 → 휴식 → 2부 → 학원 소개. 상단 고정 탭으로 이동 */
+:root{
+  --paper:#f7f5f0;
+  --ink:#1d2433;
+  --muted:#686d7a;
+  --line:#e3dfd5;
+  --curtain:#8e2a3a;
+  --gold:#b08a4a;
+  --card:#ffffff;
+  --note:#2f6f8f;
+  --font-display:"Gowun Batang","Nanum Myeongjo",serif;
+  --font-body:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:58px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:#e9e6df;color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.6;-webkit-text-size-adjust:100%}
+.app{max-width:480px;margin:0 auto;background:var(--paper);min-height:100%;box-shadow:0 0 0 1px var(--line)}
+a{color:inherit}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px}
+
+/* 예시 배너 */
+.sample{background:var(--ink);color:#d9d4c7;font-size:12px;padding:8px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.sample button{background:transparent;border:1px solid #5a6276;border-radius:999px;padding:4px 10px;font-size:12px;color:#f1ede3;cursor:pointer;white-space:nowrap}
+
+/* 표지 */
+.cover{position:relative;background:var(--curtain);color:#fbf6ec;padding:40px 24px 28px;overflow:hidden}
+.cover::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(0,0,0,.14) 0 14px,rgba(255,255,255,.04) 14px 30px);pointer-events:none}
+.cover>*{position:relative}
+.keys{display:flex;height:34px;margin:0 -24px 28px;opacity:.9}
+.keys span{flex:1;background:#fbf6ec;border-right:1px solid #cfc6b4;position:relative}
+.keys span.b::after{content:"";position:absolute;right:-30%;top:0;width:60%;height:62%;background:var(--ink);z-index:1}
+.edition{font-size:13px;letter-spacing:.2em;color:#e9cf9e}
+.cover h1{font-size:40px;line-height:1.2;margin:10px 0 6px;font-weight:700}
+.cover .sub{font-family:var(--font-display);font-size:18px;color:#f3e3c6}
+.facts{margin:26px 0 0;display:grid;gap:0;border-top:1px solid rgba(251,246,236,.3)}
+.facts div{display:grid;grid-template-columns:64px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid rgba(251,246,236,.3)}
+.facts dt{font-size:12px;color:#e9cf9e;padding-top:2px}
+.facts dd{margin:0;font-size:15px}
+.facts small{display:block;color:#ead9bd;font-size:13px}
+.cta{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 14px;border-radius:10px;font-size:14px;font-weight:500;text-decoration:none;border:1px solid rgba(251,246,236,.5);background:transparent;cursor:pointer}
+.btn.solid{background:#fbf6ec;color:var(--curtain);border-color:#fbf6ec}
+
+/* 상단 탭 */
+.tabs{position:sticky;top:0;z-index:20;background:rgba(247,245,240,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);display:flex;gap:4px;padding:8px 12px;overflow-x:auto}
+.tabs a{flex:1;text-align:center;text-decoration:none;font-size:14px;padding:7px 10px;border-radius:999px;color:var(--muted);white-space:nowrap}
+.tabs a.on{background:var(--ink);color:var(--paper)}
+
+section{padding:32px 20px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:12px;letter-spacing:.14em;color:var(--gold);font-weight:700;margin-bottom:6px}
+section h2{font-size:24px;margin-bottom:14px}
+.lead{color:var(--muted);margin:0 0 16px}
+
+/* 기획 메모(권장 항목 표시) */
+.rec{display:none;margin:0 0 14px;padding:10px 12px;border-left:3px solid var(--note);background:#e8f1f5;color:#24485b;font-size:13px;line-height:1.5;border-radius:0 8px 8px 0}
+.rec b{display:inline-block;background:var(--note);color:#fff;font-size:11px;padding:1px 7px;border-radius:999px;margin-right:6px}
+.notes-on .rec{display:block}
+
+/* 인사말 */
+.letter p{margin:0 0 12px;font-family:var(--font-display);font-size:16px;line-height:1.85}
+.sign{text-align:right;color:var(--muted);font-size:14px}
+
+/* 관람 안내 */
+.rules{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.rules li{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.rules .ic{width:28px;height:28px;border-radius:50%;background:var(--paper);display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--curtain)}
+.rules strong{display:block;font-size:14px}
+.rules span{font-size:13px;color:var(--muted)}
+
+/* 프로그램 */
+.prog{list-style:none;margin:0;padding:0}
+.item{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:16px 0;border-bottom:1px dashed var(--line)}
+.item:last-child{border-bottom:0}
+.no{font-family:var(--font-display);font-size:22px;color:var(--gold);line-height:1.2;font-variant-numeric:tabular-nums}
+.who{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-bottom:6px}
+.kid{background:none;border:0;padding:0;font-size:17px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;border-bottom:2px solid var(--curtain);line-height:1.3}
+.kid .play{width:16px;height:16px;border-radius:50%;background:var(--curtain);display:inline-grid;place-items:center}
+.kid .play::after{content:"";border-left:6px solid #fff;border-top:4px solid transparent;border-bottom:4px solid transparent;margin-left:2px}
+.grade{font-size:12px;color:var(--muted)}
+.amp{font-size:12px;color:var(--muted)}
+.piece{display:inline;font-family:var(--font-display);font-size:16px;text-decoration:none;color:var(--ink);background-image:linear-gradient(var(--gold),var(--gold));background-size:100% 1px;background-position:0 100%;background-repeat:no-repeat;padding-bottom:1px}
+.piece::after{content:" ↗";font-family:var(--font-body);font-size:12px;color:var(--gold)}
+.composer{display:block;font-size:13px;color:var(--muted);margin-top:2px}
+.tag{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);background:var(--card)}
+.tag.duo{border-color:#d9bfc4;color:var(--curtain)}
+.tag.all{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.hint{font-size:12px;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:6px;display:flex;gap:14px;flex-wrap:wrap}
+.hint i{font-style:normal;display:inline-flex;align-items:center;gap:5px}
+.dot-red{width:10px;height:10px;border-radius:50%;background:var(--curtain);display:inline-block}
+.line-gold{width:16px;height:2px;background:var(--gold);display:inline-block}
+
+/* 휴식 */
+.intermission{background:var(--ink);color:#efe9dc;text-align:center}
+.intermission h2{color:#fbf6ec}
+.intermission .lead{color:#c7c2b6}
+.intermission .rec{text-align:left}
+.time-pill{display:inline-block;border:1px solid #5a6276;border-radius:999px;padding:4px 14px;font-size:13px;margin-bottom:10px;font-variant-numeric:tabular-nums}
+
+/* 선생님 */
+.teachers{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.teachers div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 8px;text-align:center}
+.av{width:44px;height:44px;border-radius:50%;margin:0 auto 6px;background:var(--paper);display:grid;place-items:center;font-family:var(--font-display);font-size:18px;color:var(--curtain);border:1px solid var(--line)}
+.teachers b{display:block;font-size:14px}
+.teachers span{font-size:12px;color:var(--muted)}
+
+/* 학원 소개 */
+.about-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.about-card p{margin:0 0 10px}
+.points{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.points div{text-align:center;background:var(--paper);border-radius:10px;padding:10px 4px}
+.points b{display:block;font-family:var(--font-display);font-size:22px;color:var(--curtain);font-variant-numeric:tabular-nums}
+.points span{font-size:12px;color:var(--muted)}
+.timeline{list-style:none;margin:20px 0 0;padding:0 0 0 18px;border-left:2px solid var(--line)}
+.timeline li{position:relative;padding:0 0 16px 10px}
+.timeline li::before{content:"";position:absolute;left:-25px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--paper);border:2px solid var(--gold)}
+.timeline li.now::before{background:var(--curtain);border-color:var(--curtain)}
+.timeline .y{font-weight:700;font-variant-numeric:tabular-nums;font-size:14px}
+.timeline .t{font-size:14px;color:var(--muted)}
+.links{display:grid;gap:8px;margin-top:20px}
+.link-row{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;text-decoration:none}
+.link-row .ic{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px}
+.ig{background:linear-gradient(135deg,#f5a33a,#d6336c 55%,#7b3fbf)}
+.ph{background:var(--ink)}
+.mp{background:#2e9e5b}
+.link-row b{display:block;font-size:14px}
+.link-row span{font-size:13px;color:var(--muted)}
+.link-row em{font-style:normal;color:var(--gold)}
+
+footer{padding:28px 20px 40px;text-align:center;font-size:13px;color:var(--muted)}
+footer .thanks{font-family:var(--font-display);font-size:17px;color:var(--ink);margin-bottom:12px}
+.copy{background:var(--ink);color:var(--paper);border:0;border-radius:10px;padding:10px 16px;font-size:14px;cursor:pointer}
+
+/* 아이 소개 시트 */
+.scrim{position:fixed;inset:0;background:rgba(20,22,30,.45);z-index:40;display:none}
+.sheet{position:fixed;left:50%;bottom:0;transform:translate(-50%,100%);width:100%;max-width:480px;background:var(--paper);border-radius:20px 20px 0 0;z-index:41;padding:12px 22px 28px;transition:transform .25s ease}
+.open .scrim{display:block}
+.open .sheet{transform:translate(-50%,0)}
+.grip{width:40px;height:4px;border-radius:2px;background:var(--line);margin:0 auto 16px}
+.sheet-head{display:flex;gap:14px;align-items:center}
+.sheet-av{width:64px;height:64px;border-radius:50%;background:var(--curtain);color:#fbf6ec;display:grid;place-items:center;font-family:var(--font-display);font-size:26px;flex:none}
+.sheet h3{font-size:22px}
+.sheet .meta{font-size:13px;color:var(--muted)}
+.quote{margin:16px 0;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:12px;font-family:var(--font-display);font-size:16px}
+.quote small{display:block;font-family:var(--font-body);font-size:12px;color:var(--muted);margin-bottom:4px}
+.video{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:12px;background:var(--curtain);color:#fff;text-decoration:none;font-weight:700}
+.close{display:block;width:100%;margin-top:8px;padding:12px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+.sheet .ex{font-size:12px;color:var(--note);text-align:center;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="app notes-on" id="app">
+
+  <div class="sample">
+    <span>예시 화면 · 이름·일정·주소는 샘플입니다</span>
+    <button type="button" id="toggleNotes" aria-pressed="true">기획 메모 숨기기</button>
+  </div>
+
+  <!-- 1. 표지 -->
+  <header class="cover" id="cover">
+    <div class="keys" aria-hidden="true">
+      <span class="b"></span><span class="b"></span><span></span><span class="b"></span><span class="b"></span><span class="b"></span><span></span>
+      <span class="b"></span><span class="b"></span><span></span><span class="b"></span><span class="b"></span><span class="b"></span><span></span>
+    </div>
+    <div class="edition">YULLIM PIANO · THE 12TH RECITAL</div>
+    <h1>율림피아노<br>제12회 피아노 연주회</h1>
+    <div class="sub">건반 위에 피어난 열두 번째 봄</div>
+
+    <dl class="facts">
+      <div><dt>일시</dt><dd>2027년 2월 20일 (토) 오후 3시<small>입장 2시 30분 · 공연 약 100분 (휴식 15분 포함)</small></dd></div>
+      <div><dt>장소</dt><dd>○○문화예술회관 소공연장<small>대전광역시 ○○구 ○○로 123, 2층</small></dd></div>
+      <div><dt>주차</dt><dd>회관 지하주차장 2시간 무료<small>로비 안내데스크에서 차량번호 등록 · 만차 시 맞은편 ○○공영주차장(도보 3분)</small></dd></div>
+      <div><dt>문의</dt><dd>율림피아노 042-000-0000</dd></div>
+    </dl>
+
+    <div class="cta">
+      <a class="btn solid" href="#part1">연주 순서 보기</a>
+      <a class="btn" href="https://map.naver.com/p/search/%EB%8C%80%EC%A0%84%20%EB%AC%B8%ED%99%94%EC%98%88%EC%88%A0%ED%9A%8C%EA%B4%80">네이버 지도로 길찾기 ↗</a>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="페이지 이동">
+    <a href="#guide" data-sec="guide">안내</a>
+    <a href="#part1" data-sec="part1">1부</a>
+    <a href="#part2" data-sec="part2">2부</a>
+    <a href="#about" data-sec="about">학원소개</a>
+  </nav>
+
+  <!-- 2. 인사말 + 관람 안내 -->
+  <section id="guide">
+    <p class="rec"><b>권장</b>원장 인사말은 종이 순서지 표지 안쪽에 있던 내용입니다. 3~4문장이면 충분하고, 감사 인사와 아이들의 1년 노력에 대한 언급이 들어가면 좋습니다.</p>
+    <div class="eyebrow">GREETING</div>
+    <h2>인사말</h2>
+    <div class="letter">
+      <p>한 해 동안 매일 조금씩 건반 앞에 앉았던 아이들이 오늘 무대에 섭니다. 틀려도 다시 시작하는 용기, 끝까지 연주하는 끈기를 배운 시간이었습니다.</p>
+      <p>객석에서 보내주시는 박수가 아이들에게 가장 큰 선물이 됩니다. 귀한 걸음 해주셔서 감사합니다.</p>
+      <div class="sign">율림피아노 원장 ○○○ 드림</div>
+    </div>
+  </section>
+
+  <section>
+    <p class="rec"><b>권장</b>가족 관객이 많은 학원 연주회에서 가장 자주 생기는 문제(곡 중간 입장, 플래시 촬영, 악장 사이 박수)를 미리 안내합니다. 종이에선 잘 안 읽히던 내용도 모바일 첫 화면 근처에 두면 효과가 좋습니다.</p>
+    <div class="eyebrow">ETIQUETTE</div>
+    <h2>관람 안내</h2>
+    <ul class="rules">
+      <li><span class="ic">1</span><div><strong>휴대폰은 무음으로</strong><span>이 페이지는 화면 밝기를 낮춰서 봐 주세요.</span></div></li>
+      <li><span class="ic">2</span><div><strong>입장·이동은 곡과 곡 사이에</strong><span>연주 중에는 출입문 앞에서 잠시 기다려 주세요.</span></div></li>
+      <li><span class="ic">3</span><div><strong>촬영은 내 아이 순서에만, 플래시 없이</strong><span>다른 아이의 연주가 담긴 영상은 SNS에 올리지 말아 주세요.</span></div></li>
+      <li><span class="ic">4</span><div><strong>박수는 아이가 인사할 때</strong><span>여러 곡을 연주하는 경우 마지막 곡이 끝난 뒤에 쳐 주세요.</span></div></li>
+      <li><span class="ic">5</span><div><strong>꽃다발은 공연 후 로비에서</strong><span>공연 중 무대 위로 전달하는 것은 어렵습니다.</span></div></li>
+    </ul>
+  </section>
+
+  <!-- 3. 1부 -->
+  <section id="part1">
+    <div class="eyebrow">PART 1 · 15:00</div>
+    <h2>1부</h2>
+    <div class="hint"><i><span class="dot-red"></span>이름을 누르면 소개 영상</i><i><span class="line-gold"></span>곡명을 누르면 곡 이야기</i></div>
+    <p class="rec"><b>권장</b>이름 옆 학년, 곡명 아래 작곡가, 독주/연탄 표시를 넣으면 객석에서 "지금 누가 무엇을 치는지" 바로 알 수 있습니다. 저학년·초급 곡을 1부에, 고학년·상급 곡을 2부에 두는 것이 일반적입니다.</p>
+    <ol class="prog" id="list1"></ol>
+  </section>
+
+  <!-- 휴식 -->
+  <section class="intermission">
+    <p class="rec"><b>권장</b>휴식 시간 안내와 포토존 위치를 넣으면 로비 혼잡이 줄어듭니다. 단체사진 시간도 함께 알려주세요.</p>
+    <span class="time-pill">15:45 – 16:00</span>
+    <h2>휴식 15분</h2>
+    <p class="lead">로비 포토존에서 기념사진을 남겨 주세요. 2부 시작 3분 전에 종이 울립니다.</p>
+  </section>
+
+  <!-- 4. 2부 -->
+  <section id="part2">
+    <div class="eyebrow">PART 2 · 16:00</div>
+    <h2>2부</h2>
+    <ol class="prog" id="list2" start="9"></ol>
+    <p class="rec"><b>권장</b>마지막은 선생님·전체 합주 같은 피날레와, 공연 직후 단체사진 안내로 마무리하면 행사가 깔끔하게 끝납니다.</p>
+  </section>
+
+  <section>
+    <p class="rec"><b>권장</b>지도해 주신 선생님 소개. 학부모가 담당 선생님 이름을 몰라 인사를 못 하는 경우가 많습니다.</p>
+    <div class="eyebrow">TEACHERS</div>
+    <h2>함께한 선생님</h2>
+    <div class="teachers">
+      <div><div class="av">김</div><b>김○○</b><span>원장 · 피아노 전공</span></div>
+      <div><div class="av">이</div><b>이○○</b><span>초급·유아반</span></div>
+      <div><div class="av">박</div><b>박○○</b><span>중·고급반</span></div>
+    </div>
+  </section>
+
+  <!-- 5. 마지막: 학원 소개 -->
+  <section id="about">
+    <div class="eyebrow">ABOUT</div>
+    <h2>율림피아노를 소개합니다</h2>
+    <div class="about-card">
+      <p>율림피아노는 "끝까지 한 곡을 완성하는 경험"을 가장 중요하게 생각하는 동네 피아노 학원입니다. 1:1 개인 레슨과 이론·청음 수업을 함께 진행하며, 매년 연주회를 통해 아이들이 무대에 설 기회를 만듭니다.</p>
+      <div class="points">
+        <div><b>12</b><span>회째 연주회</span></div>
+        <div><b>16</b><span>올해 출연</span></div>
+        <div><b>2015</b><span>개원</span></div>
+      </div>
+    </div>
+
+    <p class="rec" style="margin-top:18px"><b>권장</b>연혁은 5~7줄 정도가 읽기 좋습니다. 연주회 회차, 이전·확장, 수상 실적 같은 굵직한 일만 남기세요.</p>
+    <ol class="timeline">
+      <li><div class="y">2015</div><div class="t">율림피아노 개원</div></li>
+      <li><div class="y">2016</div><div class="t">제1회 정기 연주회</div></li>
+      <li><div class="y">2019</div><div class="t">이론·청음반 개설</div></li>
+      <li><div class="y">2021</div><div class="t">제6회 연주회 온라인 생중계로 진행</div></li>
+      <li><div class="y">2023</div><div class="t">현 위치로 확장 이전, 연습실 6실 운영</div></li>
+      <li class="now"><div class="y">2027</div><div class="t">제12회 정기 연주회 (오늘)</div></li>
+    </ol>
+
+    <div class="links">
+      <a class="link-row" href="https://www.instagram.com/">
+        <span class="ic ig">IG</span>
+        <div><b>인스타그램 @yullim_piano</b><span>오늘 연주회 사진과 영상이 올라옵니다</span></div>
+        <em>↗</em>
+      </a>
+      <a class="link-row" href="tel:0420000000">
+        <span class="ic ph">☎</span>
+        <div><b>상담 문의 042-000-0000</b><span>평일 오후 1시 – 8시</span></div>
+        <em>↗</em>
+      </a>
+      <a class="link-row" href="https://map.naver.com/">
+        <span class="ic mp">N</span>
+        <div><b>학원 위치</b><span>대전광역시 ○○구 ○○로 45, 3층</span></div>
+        <em>↗</em>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="thanks">오늘 함께해 주셔서 감사합니다</div>
+    <p class="rec" style="text-align:left"><b>권장</b>링크 복사 버튼을 두면 오지 못한 가족에게 순서지를 바로 전달할 수 있습니다.</p>
+    <button class="copy" type="button" id="copyBtn">순서지 링크 복사</button>
+    <p id="copyMsg" aria-live="polite"></p>
+    <p>© 율림피아노</p>
+  </footer>
+
+  <div class="scrim" id="scrim"></div>
+  <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sName">
+    <div class="grip"></div>
+    <div class="sheet-head">
+      <div class="sheet-av" id="sAv"></div>
+      <div><h3 id="sName"></h3><div class="meta" id="sMeta"></div></div>
+    </div>
+    <div class="quote"><small>무대에 서는 마음</small><span id="sQuote"></span></div>
+    <a class="video" id="sVideo" href="#">▶ 소개 영상 보기</a>
+    <div class="ex">예시 링크입니다. 실제로는 유튜브 '일부 공개' 영상 주소를 넣습니다.</div>
+    <button class="close" type="button" id="sClose">닫기</button>
+  </div>
+</div>
+
+<script>
+const NAMU = q => "https://namu.wiki/Go?q=" + encodeURIComponent(q);
+const VIDEO = "https://www.youtube.com/";
+// type: solo | duo | all
+const part1 = [
+  {name:"김서윤", grade:"7세", years:"1년", piece:"반짝반짝 작은 별 변주곡 (주제)", composer:"W. A. 모차르트", wiki:"작은 별 변주곡", type:"solo", quote:"처음 서는 무대라 떨리지만 엄마랑 약속한 대로 끝까지 칠게요!"},
+  {name:"이도윤", grade:"초1", years:"1년 6개월", piece:"즐거운 농부 Op.68-10", composer:"R. 슈만", wiki:"어린이를 위한 앨범", type:"solo", quote:"농부 아저씨가 신나게 일하는 모습을 상상하면서 쳐요."},
+  {name:"박하린 · 박하준", grade:"초2 · 초1", years:"남매", piece:"헝가리 무곡 제5번 (연탄)", composer:"J. 브람스", wiki:"헝가리 무곡", type:"duo", quote:"동생이랑 박자 맞추는 게 제일 어려웠어요."},
+  {name:"최지아", grade:"초2", years:"2년", piece:"아라베스크 Op.100-2", composer:"F. 부르크뮐러", wiki:"부르크뮐러 25 연습곡", type:"solo", quote:"빠른 부분을 100번 넘게 연습했어요."},
+  {name:"정우진", grade:"초3", years:"2년", piece:"인형의 병 Op.39-7", composer:"P. I. 차이콥스키", wiki:"어린이를 위한 앨범(차이콥스키)", type:"solo", quote:"슬픈 곡이라 천천히, 조용하게 치려고 노력했어요."},
+  {name:"한소율", grade:"초3", years:"3년", piece:"소나티네 Op.36 No.1 1악장", composer:"M. 클레멘티", wiki:"소나티네", type:"solo", quote:"할머니가 오신대요! 잘 들어주세요."},
+  {name:"오시현", grade:"초4", years:"3년", piece:"인생의 회전목마", composer:"히사이시 조", wiki:"인생의 회전목마", type:"solo", quote:"제일 좋아하는 영화 음악을 직접 골랐어요."},
+  {name:"윤채원", grade:"초4", years:"4년", piece:"강아지 왈츠 Op.64-1", composer:"F. 쇼팽", wiki:"강아지 왈츠", type:"solo", quote:"우리 집 강아지 콩이를 생각하면서 칩니다."}
+];
+const part2 = [
+  {name:"강예준", grade:"초5", years:"4년", piece:"엘리제를 위하여", composer:"L. v. 베토벤", wiki:"엘리제를 위하여", type:"solo", quote:"중간 부분이 갑자기 빨라져서 집중해야 해요."},
+  {name:"서지유", grade:"초5", years:"5년", piece:"터키 행진곡 (소나타 K.331 3악장)", composer:"W. A. 모차르트", wiki:"터키 행진곡", type:"solo", quote:"작년엔 실수했는데 올해는 꼭 완벽하게!"},
+  {name:"임하은", grade:"초6", years:"5년", piece:"아라베스크 제1번", composer:"C. 드뷔시", wiki:"아라베스크(드뷔시)", type:"solo", quote:"물결이 흐르는 느낌을 내고 싶었어요."},
+  {name:"조민준", grade:"초6", years:"6년", piece:"피아노 소나타 제8번 '비창' 2악장", composer:"L. v. 베토벤", wiki:"피아노 소나타 8번(베토벤)", type:"solo", quote:"아빠가 제일 좋아하는 곡이에요."},
+  {name:"신유나", grade:"중1", years:"7년", piece:"녹턴 Op.9 No.2", composer:"F. 쇼팽", wiki:"녹턴 Op.9 No.2", type:"solo", quote:"중학생이 되고 처음 서는 무대예요."},
+  {name:"배서진", grade:"중2", years:"8년", piece:"사랑의 꿈 제3번", composer:"F. 리스트", wiki:"사랑의 꿈", type:"solo", quote:"손이 커져서 드디어 칠 수 있게 된 곡!"},
+  {name:"홍지안", grade:"중3", years:"9년", piece:"즉흥환상곡 Op.66", composer:"F. 쇼팽", wiki:"즉흥환상곡", type:"solo", quote:"율림에서의 마지막 연주회입니다. 감사했습니다."},
+  {name:"선생님과 전체 출연자", grade:"피날레", years:"16명", piece:"캐논 변주곡 (합주 편곡)", composer:"J. 파헬벨", wiki:"캐논(파헬벨)", type:"all", quote:"오늘 무대에 선 모든 친구들과 선생님이 함께 연주합니다. 연주 후 무대 위 단체사진이 있습니다."}
+];
+const tagFor = t => t==="duo" ? '<span class="tag duo">연탄</span>' : t==="all" ? '<span class="tag all">피날레</span>' : '<span class="tag">독주</span>';
+const all = [...part1, ...part2];
+function render(list, el, offset){
+  el.innerHTML = list.map((k,i)=>`
+    <li class="item">
+      <div class="no">${String(i+1+offset).padStart(2,"0")}</div>
+      <div>
+        <div class="who">
+          <button class="kid" type="button" data-i="${i+offset}"><span class="play" aria-hidden="true"></span>${k.name}</button>
+          <span class="grade">${k.grade}</span>${tagFor(k.type)}
+        </div>
+        <a class="piece" href="${NAMU(k.wiki)}">${k.piece}</a>
+        <span class="composer">${k.composer}</span>
+      </div>
+    </li>`).join("");
+}
+render(part1, document.getElementById("list1"), 0);
+render(part2, document.getElementById("list2"), part1.length);
+
+const app = document.getElementById("app");
+const sheet = document.getElementById("sheet");
+let lastFocus = null;
+function openSheet(i){
+  const k = all[i];
+  document.getElementById("sAv").textContent = k.type==="all" ? "♪" : k.name.slice(1,2);
+  document.getElementById("sName").textContent = k.name;
+  document.getElementById("sMeta").textContent = k.grade + " · " + (k.type==="all" ? k.years + " 출연" : k.type==="duo" ? k.years : "율림피아노 " + k.years) + " · " + k.piece;
+  document.getElementById("sQuote").textContent = k.quote;
+  document.getElementById("sVideo").href = VIDEO;
+  lastFocus = document.activeElement;
+  app.classList.add("open");
+  document.getElementById("sClose").focus();
+}
+function closeSheet(){ app.classList.remove("open"); if(lastFocus) lastFocus.focus(); }
+document.addEventListener("click", e=>{
+  const b = e.target.closest(".kid"); if(b) openSheet(+b.dataset.i);
+});
+document.getElementById("scrim").addEventListener("click", closeSheet);
+document.getElementById("sClose").addEventListener("click", closeSheet);
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") closeSheet(); });
+
+const tn = document.getElementById("toggleNotes");
+tn.addEventListener("click", ()=>{
+  const on = app.classList.toggle("notes-on");
+  tn.textContent = on ? "기획 메모 숨기기" : "기획 메모 보기";
+  tn.setAttribute("aria-pressed", on);
+});
+
+document.getElementById("copyBtn").addEventListener("click", async ()=>{
+  const msg = document.getElementById("copyMsg");
+  try { await navigator.clipboard.writeText(location.href); msg.textContent = "링크를 복사했어요."; }
+  catch(_) { msg.textContent = "복사가 막혀 있어요. 주소창의 링크를 길게 눌러 복사해 주세요."; }
+});
+
+// 현재 보고 있는 섹션의 탭 강조
+const tabs = [...document.querySelectorAll(".tabs a")];
+const secs = tabs.map(t=>document.getElementById(t.dataset.sec));
+function markTab(){
+  const y = window.scrollY + 90;
+  let cur = -1;
+  secs.forEach((s,i)=>{ if(s.offsetTop <= y) cur = i; });
+  tabs.forEach((t,i)=>t.classList.toggle("on", i===cur));
+}
+window.addEventListener("scroll", markTab, {passive:true});
+markTab();
+</script>
+</body>
+</html>
